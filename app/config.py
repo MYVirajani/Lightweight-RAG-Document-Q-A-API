@@ -1,8 +1,3 @@
-"""
-Central configuration for the RAG Document Q&A API.
-All values are loaded from environment variables (see .env.example),
-with sensible defaults so the app still runs if a var is missing.
-"""
 import os
 from dotenv import load_dotenv
 

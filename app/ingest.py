@@ -1,14 +1,3 @@
-"""
-Ingestion pipeline for the RAG Document Q&A API.
-
-Usage:
-    python -m app.ingest data/sample_document.txt
-    python -m app.ingest data/sample_document.pdf
-
-Supports .txt and .pdf files. Splits the document into overlapping
-word-based chunks, embeds them with sentence-transformers, and stores
-them in a persistent ChromaDB collection.
-"""
 import os
 import sys
 import uuid
@@ -26,7 +15,7 @@ from app.embeddings import embed_texts
 
 
 def extract_text(file_path: str) -> str:
-    """Extract raw text from a .txt or .pdf file. Raises ValueError for other extensions."""
+    
     ext = os.path.splitext(file_path)[1].lower()
 
     if ext == ".txt":
@@ -45,10 +34,7 @@ def extract_text(file_path: str) -> str:
 
 
 def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
-    """
-    Split text into overlapping chunks by word count.
-    A simple, dependency-free splitter — good enough for short documents.
-    """
+    
     words = text.split()
     if not words:
         return []
@@ -66,7 +52,7 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
 
 
 def get_chroma_collection():
-    """Get (or create) the persistent Chroma collection, using cosine distance."""
+    
     client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
     collection = client.get_or_create_collection(
         name=COLLECTION_NAME,
@@ -76,7 +62,7 @@ def get_chroma_collection():
 
 
 def ingest_document(file_path: str) -> int:
-    """Read a .txt or .pdf file, chunk it, embed the chunks, and store them. Returns chunk count."""
+    
     text = extract_text(file_path)
 
     chunks = chunk_text(text)
